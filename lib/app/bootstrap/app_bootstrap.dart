@@ -73,7 +73,8 @@ class AppBootstrap {
   }
 
   static Future<void> _loadEnvironment() async {
-    const envFile = '$appFlavor.env';
+    // Desktop builds have no flavors, so they name the env with --dart-define=COCONUT_FLAVOR=<flavor>.
+    const envFile = '${appFlavor ?? String.fromEnvironment('COCONUT_FLAVOR', defaultValue: 'regtest')}.env';
     await dotenv.load(fileName: envFile);
 
     CoconutWalletApp.kFaucetHost = dotenv.env[DotenvKeys.apiHost] ?? '';
