@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:coconut_wallet/widgets/features/qr/desktop_qr_feed.dart';
 import 'package:coconut_wallet/widgets/features/qr/overlay/scanner_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -129,13 +130,19 @@ class _QrScannerViewState extends State<QrScannerView> {
         return Stack(
           fit: StackFit.expand,
           children: [
-            MobileScanner(
-              key: widget.scannerKey,
-              controller: widget.controller,
-              onDetect: widget.onDetect,
-              errorBuilder: _buildError,
-              scanWindow: scanWindow,
-            ),
+            if (DesktopQrFeed.isAvailable)
+              DesktopQrFeed(
+                key: widget.scannerKey,
+                onScanData: (scanData) => widget.onDetect(BarcodeCapture(barcodes: [Barcode(rawValue: scanData)])),
+              )
+            else
+              MobileScanner(
+                key: widget.scannerKey,
+                controller: widget.controller,
+                onDetect: widget.onDetect,
+                errorBuilder: _buildError,
+                scanWindow: scanWindow,
+              ),
             ScannerOverlay(scanWindow: scanWindow),
             if (widget.overlayBuilder != null) widget.overlayBuilder!(context, scanWindow),
           ],
