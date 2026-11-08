@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:coconut_wallet/constants/shared_pref_keys.dart';
@@ -64,6 +65,8 @@ class AuthProvider extends ChangeNotifier {
       return await _osChannel.invokeMethod<bool>('isDevicePasscodeSet') ?? false;
     } on MissingPluginException catch (e) {
       Logger.log(e);
+      // Linux desktop has no OS passcode channel and no local_auth plugin.
+      if (Platform.isLinux) return true;
       return await _auth.isDeviceSupported();
     } on PlatformException catch (e) {
       Logger.log(e);
