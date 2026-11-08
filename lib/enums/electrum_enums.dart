@@ -73,7 +73,12 @@ enum DefaultElectrumServer {
 
   // Regtest
   regtest(
-    ElectrumServer('regtest-electrum.coconut.onl', 443, true),
+    // A local regtest stack names its own Electrum server at build time.
+    ElectrumServer(
+      String.fromEnvironment('REGTEST_ELECTRUM_HOST', defaultValue: 'regtest-electrum.coconut.onl'),
+      int.fromEnvironment('REGTEST_ELECTRUM_PORT', defaultValue: 443),
+      bool.fromEnvironment('REGTEST_ELECTRUM_SSL', defaultValue: true),
+    ),
     'REGTEST',
     99,
     true, // isRegtest

@@ -9,6 +9,8 @@ import 'package:coconut_wallet/constants/shared_pref_keys.dart';
 import 'package:coconut_wallet/design_system/theme/coconut_theme_data.dart';
 import 'package:coconut_wallet/providers/preferences/electrum_server_provider.dart';
 import 'package:coconut_wallet/repository/shared_preference/shared_prefs_repository.dart';
+import 'package:coconut_wallet/services/payjoin/payjoin_config.dart';
+import 'package:coconut_wallet/services/payjoin/payjoin_demo_config.dart';
 import 'package:coconut_wallet/utils/logger.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -80,6 +82,7 @@ class AppBootstrap {
     CoconutWalletApp.kFaucetHost = dotenv.env[DotenvKeys.apiHost] ?? '';
     CoconutWalletApp.kNetworkType = NetworkType.getNetworkType(dotenv.env[DotenvKeys.networkType]!);
     NetworkType.setNetworkType(CoconutWalletApp.kNetworkType);
+    PayjoinConfig.current = await payjoinConfigFromDefines();
   }
 
   static Future<void> _initializeFirebase() async {
